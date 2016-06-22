@@ -14,17 +14,36 @@ var utils = {
         }
     },
     object: {
+        isObject: function (obj) {
+            return typeof obj === 'object';
+        },
+        isFunction: function (obj) {
+            return typeof obj === 'function';
+        },
+        isArray: function (obj) {
+            return this.isNotNull(obj) && obj.constructor == Array;
+        },
         isNull: function (obj) {
             return typeof obj === "undefined" || obj === null;
         },
         isNotNull: function (obj) {
             return !this.isNull(obj);
         },
-        clone: function (obj) {
-            if (utils.object.isNull(obj)) {
-                return null;
+        getChildrenPath: function (obj, c, k) {
+            if (this.isNull(obj)) return null;
+            if (obj === c) {
+                return k;
             }
-            return JSON.parse(JSON.stringify(obj));
+            if (this.isObject(obj)) {
+                var v;
+                for (var key in obj) {
+                    v = this.getChildrenPath(obj[key], c, key);
+                    if (utils.string.isNotBlank(v)) {
+                        return (utils.string.isNotBlank(k) ? k + '.' : '') + v;
+                    }
+                }
+            }
+            return null;
         }
     },
     string: {
@@ -46,8 +65,11 @@ var utils = {
             //str = str.replace(/\r\n/ig, "<br/>");
             return str;
         },
+        trim:function(str){
+            return utils.object.isNull(str)?'':(str + "").replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "")
+        },
         isBlank: function (str) {
-            return utils.object.isNull(str) || $.trim(("" + str)).length === 0;
+            return utils.object.isNull(str) || this.trim(str).length === 0;
         },
         isNotBlank: function (str) {
             return !this.isBlank(str);
@@ -178,6 +200,12 @@ var utils = {
         },
         parse: function (s) {
             return s ? (typeof s === 'string' ? JSON.parse(s) : s) : null;
+        },
+        cloneObject: function (obj) {
+            if (utils.object.isNull(obj)) {
+                return null;
+            }
+            return JSON.parse(JSON.stringify(obj));
         }
     },
     cookie: {
