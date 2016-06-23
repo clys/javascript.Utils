@@ -1,4 +1,4 @@
-var BaseJs = function (param) {
+var BaseJs = function BaseJs(param) {
     if (typeof param !== 'object') return;
     if (param.init) {
         this.initialize = param.init;
