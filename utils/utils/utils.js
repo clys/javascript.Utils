@@ -11,6 +11,28 @@ var utils = {
             var r = window.location.search.substr(1).match(reg);
             if (r != null)return decodeURI(r[2]);
             return null;
+        },
+        getParamKeys: function () {
+            return utils.map.keys(this.getParamMap());
+        },
+        getParamVals: function () {
+            return utils.map.vals(this.getParamMap());
+        },
+        getParamMap: function () {
+            return this.paramStringToMap(window.location.search);
+        },
+        paramStringToMap: function (str) {
+            str = (str || '').replace(/^\?/, '');
+            if (utils.string.isBlank(str)) return {};
+            var entrys = str.split('&'), entry, map = {}, k, v;
+            for (var i in entrys) {
+                entry = entrys[i].split('=');
+                k = decodeURI(entry[0]);
+                v = entry[1];
+                v && (v = decodeURI(v));
+                map[k] = v;
+            }
+            return map;
         }
     },
     object: {
