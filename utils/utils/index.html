@@ -4,6 +4,27 @@
     <meta charset="UTF-8">
     <title>utils.js</title>
     <script src="utils.js"></script>
+    <script>
+        utils.fnQueue.add(function(){
+            console.log(888);
+        },null,-7);
+        utils.fnQueue.add(function(){
+            console.log(7457);
+        },null,8);
+        utils.fnQueue.add(function(){
+            console.log(34);
+        },null,5);
+        utils.fnQueue.add(function(){
+            console.log(8);
+        },null,1);
+        utils.fnQueue.add(function(){
+            console.log(22);
+        },null,2);
+        utils.fnQueue.add(function(){
+            console.log(2);
+        },null,2);
+        utils.fnQueue.run()
+    </script>
 </head>
 <body>
 

@@ -65,8 +65,8 @@ var utils = {
             //str = str.replace(/\r\n/ig, "<br/>");
             return str;
         },
-        trim:function(str){
-            return utils.object.isNull(str)?'':(str + "").replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "")
+        trim: function (str) {
+            return utils.object.isNull(str) ? '' : (str + "").replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "")
         },
         isBlank: function (str) {
             return utils.object.isNull(str) || this.trim(str).length === 0;
@@ -267,15 +267,18 @@ var utils = {
     fnQueue: {
         queue: {default: []},
         getQueue: function (queue) {
-            var that = utils.fnQueue;
+            var that = this;
             return typeof queue === 'string' ? (that.queue[queue] || (that.queue[queue] = [])) : queue || that.queue.default;
         },
-        add: function (fn, queue) {
-            var that = utils.fnQueue;
-            typeof fn === 'function' && (that.getQueue(queue)).push(fn)
+        add: function (fn, queue, i) {
+            var that = this;
+            typeof fn === 'function' && that.getQueue(queue).push({fn: fn, i: i || 999999});
+            that.getQueue(queue).sort(function (a, b) {
+                return a.i - b.i;
+            })
         },
         run: function (queue) {
-            for (var q = utils.fnQueue.getQueue(queue), i = 0, l = q.length, fn; fn = q[i], i < l || (q.length = 0, false); i++) fn();
+            for (var q = this.getQueue(queue), i = 0, l = q.length, fn; fn = (q[i] || {}).fn, i < l || (q.length = 0, false); i++) fn();
         }
     }
 };
