@@ -5,25 +5,35 @@
     <title>utils.js</title>
     <script src="utils.js"></script>
     <script>
-        utils.fnQueue.add(function(){
+        utils.fnQueue.add(function () {
             console.log(888);
-        },null,-7);
-        utils.fnQueue.add(function(){
+        }, null, -7);
+        utils.fnQueue.add(function () {
             console.log(7457);
-        },null,8);
-        utils.fnQueue.add(function(){
+        }, null, 8);
+        utils.fnQueue.add(function () {
             console.log(34);
-        },null,5);
-        utils.fnQueue.add(function(){
+        }, null, 5);
+        utils.fnQueue.add(function () {
             console.log(8);
-        },null,1);
-        utils.fnQueue.add(function(){
+        }, null, 1);
+        utils.fnQueue.add(function () {
             console.log(22);
-        },null,2);
-        utils.fnQueue.add(function(){
+        }, null, 2);
+        utils.fnQueue.add(function () {
             console.log(2);
-        },null,2);
-        utils.fnQueue.run()
+        }, null, 2);
+        utils.fnQueue.run();
+
+        utils.ready(function () {
+            console.log('a');
+        });
+        utils.ready(function () {
+            console.log('b');
+        },3);
+        utils.ready(function () {
+            console.log('c');
+        });
     </script>
 </head>
 <body>

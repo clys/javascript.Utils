@@ -1,6 +1,8 @@
 var utils = {
     pool: {
-        buoyUID: 0
+        buoyUID: 0,
+        readyInit: false,
+        isReady: false
     },
     getUID: function () {
         return '' + (new Date()).getMilliseconds() + utils.pool.buoyUID++;
@@ -301,6 +303,33 @@ var utils = {
         },
         run: function (queue) {
             for (var q = this.getQueue(queue), i = 0, l = q.length, fn; fn = (q[i] || {}).fn, i < l || (q.length = 0, false); i++) fn();
+        }
+    },
+    ready: function (fn, i) {
+        if (!utils.object.isFunction(fn) || utils.pool.isReady) return;
+        var queue = 'document_ready';
+        utils.fnQueue.add(fn, queue, i);
+        if (!utils.pool.readyInit) {
+            utils.pool.readyInit = true;
+            if (typeof jQuery === 'undefined') {
+                if (document.addEventListener) {
+                    document.addEventListener("DOMContentLoaded", run, false);
+                    window.addEventListener("load", run, false);
+                } else {
+                    document.attachEvent("onreadystatechange", run);
+                    window.attachEvent("onload", run);
+                }
+            } else {
+                $(function () {
+                    run();
+                })
+            }
+        }
+
+        function run() {
+            if (utils.pool.isReady) return;
+            utils.pool.isReady = true;
+            utils.fnQueue.run(queue);
         }
     }
 };
