@@ -24,17 +24,30 @@ var utils = {
             return this.paramStringToMap(window.location.search);
         },
         paramStringToMap: function (str) {
-            str = (str || '').replace(/^\?/, '');
+            var url = (str || '').split('?');
+            str = url[url.length - 1];
             if (utils.string.isBlank(str)) return {};
             var entrys = str.split('&'), entry, map = {}, k, v;
             for (var i in entrys) {
                 entry = entrys[i].split('=');
-                k = decodeURI(entry[0]);
+                k = decodeURIComponent(entry[0]);
                 v = entry[1];
-                v && (v = decodeURI(v));
+                v && (v = decodeURIComponent(v));
                 map[k] = v;
             }
             return map;
+        },
+        mapToParamString: function (m) {
+            if (utils.map.isEmpty(m)) return '';
+            var keys = utils.map.keys(m), url = '';
+            for (var i = 0, len = keys.length, key, val; i < len; i++) {
+                key = keys[i];
+                val = m[key];
+                if (i != 0) url += '&';
+                url += encodeURIComponent(key);
+                if (typeof val !== 'undefined') url += '=' + encodeURIComponent(val);
+            }
+            return url;
         }
     },
     object: {
@@ -186,6 +199,12 @@ var utils = {
         },
         isEqualForString: function (a, b) {
             return utils.map.isEqual(a, b, null, true);
+        },
+        isEmpty: function (m) {
+            return utils.object.isNull(m) || this.keys(m).length < 1;
+        },
+        isNotEmpty: function (m) {
+            return !this.isEmpty(m);
         },
         isEqual: function (a, b, isWeak, isString) {
             if (utils.object.isNull(a) && utils.object.isNull(b)) return true;
