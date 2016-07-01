@@ -27,7 +27,7 @@ var utils = {
             var url = (str || '').split('?');
             str = url[url.length - 1];
             if (utils.string.isBlank(str)) return {};
-            var entrys = str.split('&'), entry, map = {}, k, v;
+            var entrys = str.replace(/\+/g,' ').split('&'), entry, map = {}, k, v;
             for (var i in entrys) {
                 entry = entrys[i].split('=');
                 k = decodeURIComponent(entry[0]);
