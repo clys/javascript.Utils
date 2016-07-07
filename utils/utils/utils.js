@@ -27,7 +27,7 @@ var utils = {
             var url = (str || '').split('?');
             str = url[url.length - 1];
             if (utils.string.isBlank(str)) return {};
-            var entrys = str.replace(/\+/g,' ').split('&'), entry, map = {}, k, v;
+            var entrys = str.replace(/\+/g, ' ').split('&'), entry, map = {}, k, v;
             for (var i in entrys) {
                 entry = entrys[i].split('=');
                 k = decodeURIComponent(entry[0]);
@@ -264,6 +264,72 @@ var utils = {
         }
     },
     form: {
+        getNew: function (f) {
+            function filterAttr(ele, attr, val) {
+                var e = [], ve = utils.object.isNotNull(val);
+                for (var i = 0, len = ele ? ele.length : 0, v; i < len; i++) {
+                    v = ele[i].getAttribute(attr);
+                    if (ve ? ((val == 'text' && (v == '' || v == null)) || val === v) : utils.object.isNotNull(v)) {
+                        e.push(ele[i]);
+                    }
+                }
+                return e;
+            }
+
+            function filterChecked(ele) {
+                var e = [];
+                for (var i = 0, len = e.length; i < len; i++) {
+                    if (ele[i].checked) {
+                        e.push(ele[i]);
+                    }
+                }
+                return e;
+            }
+
+            function filter(ele, type) {
+                return filterChecked(filterAttr(ele, 'type', type))
+            }
+
+            var $input = f.getElementsByTagName('input')
+                , $select = f.getElementsByTagName('select')
+                , $radios = filter($input, 'radio')
+                , $checkboxs = filter($input, 'checkbox')
+                , $texts = filterAttr($input, 'type', 'text')
+                , params = {}
+                , name;
+
+            function getData($ele, allowEmpty) {
+                for (var i = 0, len = $ele.length, $e, val; i < len; i++) {
+                    $e = $ele[i];
+                    name = $e.getAttribute('name');
+                    val = $e.value;
+                    params[name] = !allowEmpty && utils.string.isEmpty(val) ? '' : val;
+                }
+            }
+
+            getData($select, false);
+            getData($radios, false);
+            getData($texts, true);
+
+
+            var names = {};
+            for (var j = 0, size = $checkboxs.length; j < size; j++) {
+                name = $checkboxs[j].getAttribute('name');
+                if (utils.object.isNotNull(name)) names[name] = "";
+            }
+
+            names = utils.map.keys(names);
+            for (var k = 0, leng = names.length, vals, $checkbox; k < leng; k++) {
+                name = names[k];
+                $checkbox = filterAttr($checkboxs, 'name', name);
+                vals = [];
+                for (var n = 0, lengt = $checkbox.length; n < lengt; n++) {
+                    vals.push($checkbox[n].value)
+                }
+                params[name] = vals;
+            }
+            return params;
+        },
         get: function (f) {
             var $container = $(f)
                 , $radios = $container.find(':radio:checked,select')
