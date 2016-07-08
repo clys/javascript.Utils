@@ -264,7 +264,7 @@ var utils = {
         }
     },
     form: {
-        getNew: function (f) {
+        get: function (f) {
             function filterAttr(ele, attr, val) {
                 var e = [], ve = utils.object.isNotNull(val);
                 for (var i = 0, len = ele ? ele.length : 0, v; i < len; i++) {
@@ -275,21 +275,18 @@ var utils = {
                 }
                 return e;
             }
-
             function filterChecked(ele) {
                 var e = [];
-                for (var i = 0, len = e.length; i < len; i++) {
+                for (var i = 0, len = ele.length; i < len; i++) {
                     if (ele[i].checked) {
                         e.push(ele[i]);
                     }
                 }
                 return e;
             }
-
             function filter(ele, type) {
                 return filterChecked(filterAttr(ele, 'type', type))
             }
-
             var $input = f.getElementsByTagName('input')
                 , $select = f.getElementsByTagName('select')
                 , $radios = filter($input, 'radio')
@@ -297,7 +294,6 @@ var utils = {
                 , $texts = filterAttr($input, 'type', 'text')
                 , params = {}
                 , name;
-
             function getData($ele, allowEmpty) {
                 for (var i = 0, len = $ele.length, $e, val; i < len; i++) {
                     $e = $ele[i];
@@ -306,18 +302,14 @@ var utils = {
                     params[name] = !allowEmpty && utils.string.isEmpty(val) ? '' : val;
                 }
             }
-
             getData($select, false);
             getData($radios, false);
             getData($texts, true);
-
-
             var names = {};
             for (var j = 0, size = $checkboxs.length; j < size; j++) {
                 name = $checkboxs[j].getAttribute('name');
                 if (utils.object.isNotNull(name)) names[name] = "";
             }
-
             names = utils.map.keys(names);
             for (var k = 0, leng = names.length, vals, $checkbox; k < leng; k++) {
                 name = names[k];
@@ -325,48 +317,6 @@ var utils = {
                 vals = [];
                 for (var n = 0, lengt = $checkbox.length; n < lengt; n++) {
                     vals.push($checkbox[n].value)
-                }
-                params[name] = vals;
-            }
-            return params;
-        },
-        get: function (f) {
-            var $container = $(f)
-                , $radios = $container.find(':radio:checked,select')
-                , $checkboxs = $container.find(':checkbox:checked')
-                , $texts = $container.find(':text')
-                , $checkbox
-                , $radio
-                , $text
-                , params = {}
-                , name
-                , names = {}
-                , vals
-                , val
-                , i, len;
-            for (i = 0, len = $radios.size(); i < len; i++) {
-                $radio = $radios.eq(i);
-                name = $radio.attr('name');
-                val = $radio.val();
-                params[name] = utils.string.isEmpty(val) ? '' : val;
-            }
-            for (i = 0, len = $texts.size(); i < len; i++) {
-                $text = $texts.eq(i);
-                name = $text.attr('name');
-                val = $text.val();
-                params[name] = val;
-            }
-            for (var j = 0, size = $checkboxs.size(); j < size; j++) {
-                name = $checkboxs.eq(j).attr('name');
-                if (utils.object.isNotNull(name)) names[name] = "";
-            }
-            names = utils.map.keys(names);
-            for (var k = 0, leng = names.length; k < leng; k++) {
-                name = names[k];
-                $checkbox = $checkboxs.filter('[name="' + name + '"]');
-                vals = [];
-                for (var n = 0, lengt = $checkbox.size(); n < lengt; n++) {
-                    vals.push($checkbox.eq(n).val())
                 }
                 params[name] = vals;
             }

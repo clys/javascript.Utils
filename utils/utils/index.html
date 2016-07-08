@@ -29,30 +29,32 @@
             console.log('a');
         });
         utils.ready(function () {
+            console.log(utils.form.get(document.getElementById("a")));
             console.log('b');
         },3);
         utils.ready(function () {
             console.log('c');
         });
+
     </script>
 </head>
 <body>
     <div id="a">
-        <input name="1"/>
-        <input name="2"/>
-        <input name="3"/>
-        <input name="4"/>
-        <input name="5"/>
-        <input type="checkbox" name="1">
-        <input type="checkbox" name="1">
-        <input type="checkbox" name="1">
-        <input type="checkbox" name="1">
-        <input type="checkbox" name="1">
-        <input type="radio" name="2">
-        <input type="radio" name="2">
-        <input type="radio" name="2">
-        <input type="radio" name="2">
-        <input type="radio" name="2">
+        <input name="a" value="留金咯尅哦库猎"/>
+        <input name="b" value="留噶哇噶特尅哦库啦唔"/>
+        <input name="c" value="天降正义"/>
+        <input name="d" value="在这停顿"/>
+        <input name="e" value="午时已到"/>
+        <input type="checkbox" name="1" value="a" checked>
+        <input type="checkbox" name="1" value="b">
+        <input type="checkbox" name="1" value="c" checked>
+        <input type="checkbox" name="1" value="d">
+        <input type="checkbox" name="1" value="e" checked>
+        <input type="radio" name="2" value="!">
+        <input type="radio" name="2" value="@">
+        <input type="radio" name="2" value="#" checked>
+        <input type="radio" name="2" value="$">
+        <input type="radio" name="2" value="%">
 
         <select name="miao">
             <option>1</option>
