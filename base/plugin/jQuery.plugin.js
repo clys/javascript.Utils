@@ -103,20 +103,20 @@
     }
 
     function pullEleObj(ele) {
-        var uid = getAttrVal(ele,pluginEleTagName);
+        var uid = getAttrVal(ele, pluginEleTagName);
         if (utils.string.isEmpty(uid)) {
             return null;
         }
         return pool.eleMap[uid];
     }
 
-    function updateEleObj(eleObj){
+    function updateEleObj(eleObj) {
         var uid = getAttrVal(eleObj.ele, pluginEleTagName);
         pool.eleMap[uid] = eleObj;
         return updateEleObj;
     }
 
-    function removeEleObj(eleObj){
+    function removeEleObj(eleObj) {
         var uid = getAttrVal(eleObj.ele, pluginEleTagName);
         delete pool.eleMap[uid];
         return removeEleObj;
@@ -138,7 +138,8 @@
                 if (!eleObj) return true;
 
 
-            })
+            });
+            return this;
         },
         ver: function () {
             return versions;
