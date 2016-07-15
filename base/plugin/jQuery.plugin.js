@@ -7,7 +7,8 @@
         pool = {
             defaultParam: {},
             eleMap: {}
-        };
+        },
+        currentEleObj = null;
 
     $.fn[pluginMethodsName] = function (method) {
         // Method calling logic
@@ -134,9 +135,10 @@
             $ele.each(function () {
                 var $currentEle = $(this),
                     eleObj = pushEleObj($currentEle, options),
-                    param = eleObj.param;
+                    param;
                 if (!eleObj) return true;
-
+                currentEleObj = eleObj;
+                param = eleObj.param;
 
             });
             return this;
