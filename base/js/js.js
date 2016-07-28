@@ -58,9 +58,7 @@ BaseJs.prototype = {
     },
     init: function () {
         var that = this;
-        for (var initFnName in that.inits) {
-            typeof that.inits[initFnName] === 'function' && that.inits[initFnName](that);
-        }
+        that.inits.base(that);
         typeof that.initialize == 'function' && that.initialize(arguments);
     },
     inits: {
