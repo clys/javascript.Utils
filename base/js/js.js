@@ -59,7 +59,7 @@ BaseJs.prototype = {
     init: function () {
         var that = this;
         that.inits.base(that);
-        typeof that.initialize == 'function' && that.initialize(arguments);
+        typeof that.initialize == 'function' && that.initialize.apply(that, arguments);
     },
     inits: {
         base: function (that) {
