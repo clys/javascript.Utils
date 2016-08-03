@@ -337,7 +337,7 @@ var utils = {
             })
         },
         run: function (queue) {
-            for (var q = this.getQueue(queue), i = 0, l = q.length, fn; fn = (q[i] || {}).fn, i < l || (q.length = 0, false); i++) fn();
+            for (var q = this.getQueue(queue), i = 0, fn; fn = (q[i] || {}).fn, i < q.length || (q.length = 0, false); i++) fn();
         }
     },
     ready: function (fn, i) {
