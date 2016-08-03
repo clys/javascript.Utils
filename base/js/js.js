@@ -10,6 +10,7 @@ var BaseJs = function BaseJs(param) {
     }
     if (param.pool) {
         this.pool = $.extend({}, this.pool, param.pool);
+        this.pool.element = {};
         delete param.pool
     }
     $.extend(this, param);
