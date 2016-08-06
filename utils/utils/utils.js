@@ -387,6 +387,7 @@ var utils = {
                     $e.addClass(activityClass);
                     $target.find(indexKeyS).removeClass(activityClass).hide();
                     $target.find('[' + indexKey + '="' + index + '"]').addClass(activityClass).show();
+                    param.callback && param.callback($tag, $target, index);
                 })
             }
         }
