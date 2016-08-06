@@ -366,5 +366,29 @@ var utils = {
             utils.pool.isReady = true;
             utils.fnQueue.run(queue);
         }
+    },
+    $: {
+        ele: {
+            switchTag: function (param) {
+                !param && (param = {});
+                var $tag = $(param.tag || '[role="switch-tag"]'),
+                    $target = $(param.target || ''),
+                    targetKey = param.targetKey || 'data-switch-target',
+                    indexKey = param.indexKey || 'data-index',
+                    indexKeyS = '[' + indexKey + ']',
+                    activityClass = param.activityClass || 'activity';
+                if ($target.size() == 0) {
+                    $target = $($tag.attr(targetKey));
+                    if ($target.size() == 0) return;
+                }
+                $tag.off('click.switchTag').on('click.switchTag', indexKeyS, function (e) {
+                    var $e = $(this), index = $e.attr(indexKey);
+                    $tag.find(indexKeyS).removeClass(activityClass);
+                    $e.addClass(activityClass);
+                    $target.find(indexKeyS).removeClass(activityClass).hide();
+                    $target.find('[' + indexKey + '="' + index + '"]').addClass(activityClass).show();
+                })
+            }
+        }
     }
 };
