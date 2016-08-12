@@ -73,5 +73,11 @@ BaseJs.prototype = {
                 typeof fn === "function" && fn.apply(this, [e]);
             });
         }
+    },
+    runInits:function(){
+        var that = this;
+        $.each(that.inits, function (i, initFn) {
+            initFn.name != 'base' && initFn();
+        });
     }
 };
