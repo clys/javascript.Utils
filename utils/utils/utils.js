@@ -275,6 +275,7 @@ var utils = {
                 }
                 return e;
             }
+
             function filterChecked(ele) {
                 var e = [];
                 for (var i = 0, len = ele.length; i < len; i++) {
@@ -284,9 +285,11 @@ var utils = {
                 }
                 return e;
             }
+
             function filter(ele, type) {
                 return filterChecked(filterAttr(ele, 'type', type))
             }
+
             var $input = f.getElementsByTagName('input')
                 , $select = f.getElementsByTagName('select')
                 , $radios = filter($input, 'radio')
@@ -294,6 +297,7 @@ var utils = {
                 , $texts = filterAttr($input, 'type', 'text')
                 , params = {}
                 , name;
+
             function getData($ele, allowEmpty) {
                 for (var i = 0, len = $ele.length, $e, val; i < len; i++) {
                     $e = $ele[i];
@@ -302,6 +306,7 @@ var utils = {
                     params[name] = !allowEmpty && utils.string.isEmpty(val) ? '' : val;
                 }
             }
+
             getData($select, false);
             getData($radios, false);
             getData($texts, true);
@@ -365,6 +370,22 @@ var utils = {
             if (utils.pool.isReady) return;
             utils.pool.isReady = true;
             utils.fnQueue.run(queue);
+        }
+    },
+    date: {
+        msToDHMS: function (m) {
+            var d = {};
+            m = parseInt(m, 10);
+            d.milliseconds = m % 1000;
+            m = parseInt(m / 1000, 10);
+            d.seconds = m % 60;
+            m = parseInt(m / 60, 10);
+            d.minutes = m % 60;
+            m = parseInt(m / 60, 10);
+            d.hours = m % 24;
+            m = parseInt(m / 24, 10);
+            d.day = m % 60;
+            return d;
         }
     },
     $: {
