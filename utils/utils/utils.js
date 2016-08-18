@@ -374,6 +374,7 @@ var utils = {
     },
     date: {
         msToDHMS: function (m) {
+            if (m < 1) return {milliseconds: 0, seconds: 0, minutes: 0, hours: 0, day: 0};
             var d = {};
             m = parseInt(m, 10);
             d.milliseconds = m % 1000;
