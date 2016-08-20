@@ -11,7 +11,9 @@ var utils = {
         getParam: function (name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
             var r = window.location.search.substr(1).match(reg);
-            if (r != null)return decodeURI(r[2]);
+            if (r !== null) {
+                return decodeURI(r[2]);
+            }
             return null;
         },
         getParamKeys: function () {
@@ -26,9 +28,12 @@ var utils = {
         paramStringToMap: function (str) {
             var url = (str || '').split('?');
             str = url[url.length - 1];
-            if (utils.string.isBlank(str)) return {};
+            if (utils.string.isBlank(str)) {
+                return {};
+            }
             var entrys = str.replace(/\+/g, ' ').split('&'), entry, map = {}, k, v;
             for (var i in entrys) {
+                if (!entrys.hasOwnProperty(i)) continue;
                 entry = entrys[i].split('=');
                 k = decodeURIComponent(entry[0]);
                 v = entry[1];
@@ -38,14 +43,20 @@ var utils = {
             return map;
         },
         mapToParamString: function (m) {
-            if (utils.map.isEmpty(m)) return '';
+            if (utils.map.isEmpty(m)) {
+                return '';
+            }
             var keys = utils.map.keys(m), url = '';
             for (var i = 0, len = keys.length, key, val; i < len; i++) {
                 key = keys[i];
                 val = m[key];
-                if (i != 0) url += '&';
+                if (i !== 0) {
+                    url += '&';
+                }
                 url += encodeURIComponent(key);
-                if (typeof val !== 'undefined') url += '=' + encodeURIComponent(val);
+                if (typeof val !== 'undefined') {
+                    url += '=' + encodeURIComponent(val);
+                }
             }
             return url;
         }
@@ -58,7 +69,7 @@ var utils = {
             return typeof obj === 'function';
         },
         isArray: function (obj) {
-            return this.isNotNull(obj) && obj.constructor == Array;
+            return this.isNotNull(obj) && obj.constructor === Array;
         },
         isNull: function (obj) {
             return typeof obj === "undefined" || obj === null;
@@ -67,13 +78,16 @@ var utils = {
             return !this.isNull(obj);
         },
         getChildrenPath: function (obj, c, k) {
-            if (this.isNull(obj)) return null;
+            if (this.isNull(obj)) {
+                return null;
+            }
             if (obj === c) {
                 return k;
             }
             if (this.isObject(obj)) {
                 var v;
                 for (var key in obj) {
+                    if (!obj.hasOwnProperty(key)) continue;
                     v = this.getChildrenPath(obj[key], c, key);
                     if (utils.string.isNotBlank(v)) {
                         return (utils.string.isNotBlank(k) ? k + '.' : '') + v;
@@ -99,7 +113,6 @@ var utils = {
             str = str.replace(/>/ig, "&gt;");
             str = str.replace(/"/ig, "&quot;");
             str = str.replace(/ /ig, "&nbsp;");
-            //str = str.replace(/\r\n/ig, "<br/>");
             return str;
         },
         trim: function (str) {
@@ -169,7 +182,7 @@ var utils = {
             var n = [];
             if (utils.list.isNotEmpty(l)) {
                 for (var i = 0, len = l.length, r; r = l[i], i < len; i++) {
-                    (j ? r[k] === v : r[k] == v) && n.push(r);
+                    if (j ? r[k] === v : '' + r[k] === '' + v) n.push(r);
                 }
             }
             return n;
@@ -178,7 +191,7 @@ var utils = {
             var n = -1;
             if (utils.list.isNotEmpty(l)) {
                 for (var i = b || 0, len = l.length, r; r = l[i], i < len; i++) {
-                    if (j ? r[k] === v : r[k] == v) {
+                    if (j ? r[k] === v : '' + r[k] === '' + v) {
                         n = i;
                         break;
                     }
@@ -189,7 +202,9 @@ var utils = {
     },
     map: {
         listToMap: function (list, key) {
-            if (utils.object.isNull(list) || utils.string.isEmpty(key)) return null;
+            if (utils.object.isNull(list) || utils.string.isEmpty(key)) {
+                return null;
+            }
             var map = {}, row;
             for (var i = 0, len = list.length; i < len; i++) {
                 row = list[i];
@@ -207,13 +222,19 @@ var utils = {
             return !this.isEmpty(m);
         },
         isEqual: function (a, b, isWeak, isString) {
-            if (utils.object.isNull(a) && utils.object.isNull(b)) return true;
-            if (utils.object.isNull(a) || utils.object.isNull(b)) return false;
+            if (utils.object.isNull(a) && utils.object.isNull(b)) {
+                return true;
+            }
+            if (utils.object.isNull(a) || utils.object.isNull(b)) {
+                return false;
+            }
             var aks = this.keys(a), bks = this.keys(b)
                 , aksl = aks.length, bksl = bks.length;
-            if (aksl != bksl) return false;
+            if (aksl !== bksl) {
+                return false;
+            }
             for (var i = 0; i < aksl; i++) {
-                if (isString ? a[aks[i]] + '' !== b[aks[i]] + '' : isWeak ? a[aks[i]] != b[aks[i]] : a[aks[i]] !== b[aks[i]]) {
+                if (isWeak || isString ? '' + a[aks[i]] !== '' + b[aks[i]] : a[aks[i]] !== b[aks[i]]) {
                     return false;
                 }
             }
@@ -266,10 +287,11 @@ var utils = {
     form: {
         get: function (f) {
             function filterAttr(ele, attr, val) {
-                var e = [], ve = utils.object.isNotNull(val);
+                var e = [], ve = utils.object.isNotNull(val), ist = val === 'text';
                 for (var i = 0, len = ele ? ele.length : 0, v; i < len; i++) {
                     v = ele[i].getAttribute(attr);
-                    if (ve ? ((val == 'text' && (v == '' || v == null)) || val === v) : utils.object.isNotNull(v)) {
+                    if (ist && (v === '' || v === null)) v = 'text';
+                    if (ve ? val === v : utils.object.isNotNull(v)) {
                         e.push(ele[i]);
                     }
                 }
@@ -313,7 +335,9 @@ var utils = {
             var names = {};
             for (var j = 0, size = $checkboxs.length; j < size; j++) {
                 name = $checkboxs[j].getAttribute('name');
-                if (utils.object.isNotNull(name)) names[name] = "";
+                if (utils.object.isNotNull(name)) {
+                    names[name] = "";
+                }
             }
             names = utils.map.keys(names);
             for (var k = 0, leng = names.length, vals, $checkbox; k < leng; k++) {
@@ -342,11 +366,15 @@ var utils = {
             })
         },
         run: function (queue) {
-            for (var q = this.getQueue(queue), i = 0, fn; fn = (q[i] || {}).fn, i < q.length || (q.length = 0, false); i++) fn();
+            for (var q = this.getQueue(queue), i = 0, fn; fn = (q[i] || {}).fn, i < q.length || (q.length = 0, false); i++) {
+                fn();
+            }
         }
     },
     ready: function (fn, i) {
-        if (!utils.object.isFunction(fn) || utils.pool.isReady) return;
+        if (!utils.object.isFunction(fn) || utils.pool.isReady) {
+            return;
+        }
         var queue = 'document_ready';
         utils.fnQueue.add(fn, queue, i);
         if (!utils.pool.readyInit) {
@@ -367,7 +395,9 @@ var utils = {
         }
 
         function run() {
-            if (utils.pool.isReady) return;
+            if (utils.pool.isReady) {
+                return;
+            }
             utils.pool.isReady = true;
             utils.fnQueue.run(queue);
         }
@@ -399,11 +429,13 @@ var utils = {
                     indexKey = param.indexKey || 'data-index',
                     indexKeyS = '[' + indexKey + ']',
                     activityClass = param.activityClass || 'activity';
-                if ($target.size() == 0) {
+                if ($target.size() === 0) {
                     $target = $($tag.attr(targetKey));
-                    if ($target.size() == 0) return;
+                    if ($target.size() === 0) {
+                        return;
+                    }
                 }
-                $tag.off('click.switchTag').on('click.switchTag', indexKeyS, function (e) {
+                $tag.off('click.switchTag').on('click.switchTag', indexKeyS, function () {
                     var $e = $(this), index = $e.attr(indexKey);
                     $tag.find(indexKeyS).removeClass(activityClass);
                     $e.addClass(activityClass);
