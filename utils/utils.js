@@ -201,6 +201,13 @@ var utils = {
         }
     },
     map: {
+        mapsExtVal: function (maps, key) {
+            var list = [];
+            for (var i = 0, len = maps.length; i < len; i++) {
+                list.push(maps[i][key]);
+            }
+            return list;
+        },
         listToMap: function (list, key) {
             if (utils.object.isNull(list) || utils.string.isEmpty(key)) {
                 return null;
