@@ -265,6 +265,30 @@ var utils = {
             return l;
         }
     },
+    color: {
+        RGBToHex: function (r, g, b) {
+            if (utils.object.isNull(g) || utils.object.isNull(b)) {
+                r = r.replace(/[^\d,]/g, '').split(',');
+                b = r[2];
+                g = r[1];
+                r = r[0];
+            }
+            return '#' + toHex(r) + toHex(g) + toHex(b);
+            function toHex(s) {
+                return s.toString(16).replace(/^(.)$/, '0$1')
+            }
+        },
+        HexToRGB: function (hex) {
+            hex = hex.replace(/[^0-9a-fA-F]/g, '');
+            if (hex.length === 3) {
+                hex = hex.charAt(0) + hex.charAt(0) + hex.charAt(1) + hex.charAt(1) + hex.charAt(2) + hex.charAt(2);
+            }
+            var r = parseInt(hex.substring(0, 2), 16),
+                g = parseInt(hex.substring(2, 4), 16),
+                b = parseInt(hex.substring(4, 6), 16);
+            return ['rgb(' + r + ', ' + g + ', ' + b + ')', {r: r, g: g, b: b}];
+        }
+    },
     json: {
         toString: function (j) {
             return j ? (typeof j === 'string' ? j : JSON.stringify(j)) : '';
