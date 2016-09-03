@@ -275,7 +275,7 @@ var utils = {
             }
             return '#' + toHex(r) + toHex(g) + toHex(b);
             function toHex(s) {
-                return s.toString(16).replace(/^(.)$/, '0$1')
+                return parseInt(s,10).toString(16).replace(/^(.)$/, '0$1')
             }
         },
         HexToRGB: function (hex) {
