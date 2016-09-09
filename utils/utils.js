@@ -445,8 +445,7 @@ var utils = {
             d.minutes = m % 60;
             m = parseInt(m / 60, 10);
             d.hours = m % 24;
-            m = parseInt(m / 24, 10);
-            d.day = m % 60;
+            d.day = parseInt(m / 24, 10);
             return d;
         }
     },
