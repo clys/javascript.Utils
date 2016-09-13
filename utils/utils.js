@@ -131,7 +131,7 @@ var utils = {
             return !this.isEmpty(str)
         },
         buildTpl: function (tpl, data) {
-            var re = /\{%=?((?!%}).)*%}/g,
+            var re = /\{%=?((?!%}).|\r|\n)*%}/g,
                 code = "var r = [];",
                 cursor = 0,
                 match;
