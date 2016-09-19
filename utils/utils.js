@@ -165,7 +165,7 @@ var utils = {
                 keys.push(key);
                 param.push(data[key]);
             }
-            return (new Function(keys.join(","), code.replace(/[\r\t\n]/g, ''))).apply(null, param);
+            return (new Function(keys.join(","), code.replace(/\s*([\r\n])\s*/g, ' '))).apply(null, param);
         }
     },
     list: {
