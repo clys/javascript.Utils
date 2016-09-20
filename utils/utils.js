@@ -135,10 +135,12 @@ var utils = {
                 code = "var r = [];",
                 cursor = 0,
                 match;
+
             function add(str, mode) {
                 if (utils.string.isEmpty(str)) {
                     return add;
                 }
+
                 if (mode === 1) {
                     code += str;
                 } else if (mode === 2) {
@@ -148,14 +150,16 @@ var utils = {
                 }
                 return add;
             }
+
             while (match = re.exec(tpl)) {
                 add(tpl.slice(cursor, match.index))(match[0].replace(/(^\{%=|^\{%|%}$)/g, ""), /^(\t| )*\{%=/g.test(match[0]) ? 2 : 1);
                 cursor = match.index + match[0].length;
             }
             add(tpl.substr(cursor));
             code += 'return r.join("");';
+
             var runFn = function(d){
-                return (new Function(utils.map.keys(d).join(","), code.replace(/[\r\t\n]/g, ''))).apply(null, utils.map.vals(d))
+                return (new Function(utils.map.keys(d).join(","), code.replace(/\s*([\r\n])\s*/g, ' '))).apply(null, utils.map.vals(d))
             };
             if(utils.object.isNotNull(data)){
                 return runFn(data);
