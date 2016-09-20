@@ -142,11 +142,11 @@ var utils = {
                 }
 
                 if (mode === 1) {
-                    code += str;
+                    code += str+'\r';
                 } else if (mode === 2) {
                     code += "r.push(" + str + ");"
                 } else {
-                    code += "r.push('" + str.replace(/'/g, "\\'") + "');"
+                    code += "r.push('" + str.replace(/'/g, "\\'").replace(/\s*([\r\n])\s*/g, ' ') + "');"
                 }
                 return add;
             }
@@ -159,7 +159,7 @@ var utils = {
             code += 'return r.join("");';
 
             var runFn = function(d){
-                return (new Function(utils.map.keys(d).join(","), code.replace(/\s*([\r\n])\s*/g, ' '))).apply(null, utils.map.vals(d))
+                return (new Function(utils.map.keys(d).join(","), code)).apply(null, utils.map.vals(d))
             };
             if(utils.object.isNotNull(data)){
                 return runFn(data);
