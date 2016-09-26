@@ -434,8 +434,8 @@ var utils = {
         }
     },
     date: {
-        msToDHMS: function (m) {
-            if (m < 1) return {milliseconds: 0, seconds: 0, minutes: 0, hours: 0, day: 0};
+        msToDHMS: function (m,neg) {
+            if (m < 1 && !neg) {m=0;}
             var d = {};
             m = parseInt(m, 10);
             d.milliseconds = m % 1000;
@@ -447,6 +447,21 @@ var utils = {
             d.hours = m % 24;
             d.day = parseInt(m / 24, 10);
             return d;
+        }
+    },
+    css: {
+        classStyle: function (className, style, val) {
+            var cssRules = document.all ? 'rules' : 'cssRules', reg = className.constructor == RegExp, t, d;
+            for (var i = 0, len = document.styleSheets.length; i < len; i++) {
+                for (var k = 0, size = document.styleSheets[i][cssRules] ? document.styleSheets[i][cssRules].length : 0; k < size; k++) {
+                    d = document.styleSheets[i]['rules'][k];
+                    t = d.selectorText;
+                    if (reg && className.test(t) || t === className) {
+                        return utils.object.isNull(style) ? d : (utils.object.isNull(val) ? d.style[style] : d.style[style] = val);
+                    }
+                }
+            }
+            return null;
         }
     },
     $: {
