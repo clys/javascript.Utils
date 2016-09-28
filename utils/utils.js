@@ -462,6 +462,25 @@ var utils = {
                 }
             }
             return null;
+        },
+        addClass: function (styleEle, selector, rules, index) {
+            if(styleEle.constructor !== HTMLStyleElement){
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                (document.head || document.getElementsByTagName('head')[0]).appendChild(style);
+                index = rules;
+                rules = selector;
+                selector = styleEle;
+                styleEle = style;
+            }
+            var sheet = styleEle.sheet ||styleEle.styleSheet;
+            index = utils.object.isNull(index)?(sheet.rules || sheet.cssRules).length : index;
+            if (sheet.insertRule) {
+                sheet.insertRule(selector + "{" + rules + "}", index);
+            } else {
+                sheet.addRule(selector, rules, index);
+            }
+            return styleEle;
         }
     },
     $: {
