@@ -267,13 +267,17 @@ var utils = {
     },
     color: {
         RGBToHex: function (r, g, b) {
+            var rgb = '';
             if (utils.object.isNull(g) || utils.object.isNull(b)) {
-                r = r.replace(/[^\d,]/g, '').split(',');
-                b = r[2];
-                g = r[1];
-                r = r[0];
+                if(!(/^rgba/).test(r.toLowerCase())){
+                    r = r.replace(/[^\d,]/g, '').split(',');
+                    b = r[2];
+                    g = r[1];
+                    r = r[0];
+                    rgb ='#' + toHex(r) + toHex(g) + toHex(b)
+                }
             }
-            return '#' + toHex(r) + toHex(g) + toHex(b);
+            return rgb;
             function toHex(s) {
                 return parseInt(s,10).toString(16).replace(/^(.)$/, '0$1')
             }
