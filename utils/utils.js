@@ -274,8 +274,12 @@ var utils = {
                     b = r[2];
                     g = r[1];
                     r = r[0];
-                    rgb ='#' + toHex(r) + toHex(g) + toHex(b)
+                    rgb ='#' + toHex(r) + toHex(g) + toHex(b);
+                }else{
+                    rgb ='';
                 }
+            }else{
+                rgb ='#' + toHex(r) + toHex(g) + toHex(b);
             }
             return rgb;
             function toHex(s) {
