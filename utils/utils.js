@@ -313,14 +313,14 @@ var utils = {
     },
     cookie: {
         get: function (name) {
-            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            var arr, reg = new RegExp("(^| )" + encodeURIComponent(name) + "=([^;]*)(;|$)");
             if (arr = document.cookie.match(reg))
                 return decodeURIComponent(arr[2]);
             else
                 return null;
         },
         set: function (name, val, ex) {
-            document.cookie = name + '=' + encodeURIComponent(val) + ';' + (ex ? ex : '');
+            document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(val) + ';' + (ex ? ex : '');
         }
     },
     form: {
