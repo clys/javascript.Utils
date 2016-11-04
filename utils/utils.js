@@ -392,6 +392,10 @@ var utils = {
             var that = this;
             return typeof queue === 'string' ? (that.queue[queue] || (that.queue[queue] = [])) : queue || that.queue.default;
         },
+        clear: function (queue) {
+            var that = this;
+            that.getQueue(queue).length = 0;
+        },
         add: function (fn, queue, i) {
             var that = this;
             typeof fn === 'function' && that.getQueue(queue).push({fn: fn, i: i || 999999});
