@@ -9,7 +9,8 @@ var utils = {
     },
     url: {
         getParam: function (name) {
-            return this.getParamMap()[name] || null;
+            var val = this.getParamMap()[name];
+            return utils.object.isNotNull(val) ? val : null;
         },
         getParamKeys: function () {
             return utils.map.keys(this.getParamMap());
