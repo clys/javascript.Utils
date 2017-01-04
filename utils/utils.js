@@ -126,6 +126,12 @@ var utils = {
         isNotEmpty: function (str) {
             return !this.isEmpty(str)
         },
+        equalsIgnoreCase: function (a, b) {
+            if (utils.object.isNull(a) || utils.object.isNull(b)) {
+                return false;
+            }
+            return ('' + a).toLowerCase() === ('' + b).toLowerCase();
+        },
         buildTpl: function (tpl, data) {
             var re = /\{%=?((?!%}).|\r|\n)*%}/g,
                 code = "var r = [];",
@@ -138,7 +144,7 @@ var utils = {
                 }
 
                 if (mode === 1) {
-                    code += str+'\r';
+                    code += str + '\r';
                 } else if (mode === 2) {
                     code += "r.push(" + str + ");"
                 } else {
@@ -154,12 +160,12 @@ var utils = {
             add(tpl.substr(cursor));
             code += 'return r.join("");';
 
-            var runFn = function(d){
+            var runFn = function (d) {
                 return (new Function(utils.map.keys(d).join(","), code)).apply(null, utils.map.vals(d))
             };
-            if(utils.object.isNotNull(data)){
+            if (utils.object.isNotNull(data)) {
                 return runFn(data);
-            }else{
+            } else {
                 return runFn;
             }
         }
@@ -265,21 +271,21 @@ var utils = {
         RGBToHex: function (r, g, b) {
             var rgb = '';
             if (utils.object.isNull(g) || utils.object.isNull(b)) {
-                if(!(/^rgba/).test(r.toLowerCase())){
+                if (!(/^rgba/).test(r.toLowerCase())) {
                     r = r.replace(/[^\d,]/g, '').split(',');
                     b = r[2];
                     g = r[1];
                     r = r[0];
-                    rgb ='#' + toHex(r) + toHex(g) + toHex(b);
-                }else{
-                    rgb ='';
+                    rgb = '#' + toHex(r) + toHex(g) + toHex(b);
+                } else {
+                    rgb = '';
                 }
-            }else{
-                rgb ='#' + toHex(r) + toHex(g) + toHex(b);
+            } else {
+                rgb = '#' + toHex(r) + toHex(g) + toHex(b);
             }
             return rgb;
             function toHex(s) {
-                return parseInt(s,10).toString(16).replace(/^(.)$/, '0$1')
+                return parseInt(s, 10).toString(16).replace(/^(.)$/, '0$1')
             }
         },
         HexToRGB: function (hex) {
@@ -442,8 +448,10 @@ var utils = {
         }
     },
     date: {
-        msToDHMS: function (m,neg) {
-            if (m < 1 && !neg) {m=0;}
+        msToDHMS: function (m, neg) {
+            if (m < 1 && !neg) {
+                m = 0;
+            }
             var d = {};
             m = parseInt(m, 10);
             d.milliseconds = m % 1000;
@@ -472,7 +480,7 @@ var utils = {
             return null;
         },
         addClass: function (styleEle, selector, rules, index) {
-            if(styleEle.constructor !== HTMLStyleElement){
+            if (styleEle.constructor !== HTMLStyleElement) {
                 var style = document.createElement('style');
                 style.type = 'text/css';
                 (document.head || document.getElementsByTagName('head')[0]).appendChild(style);
@@ -481,8 +489,8 @@ var utils = {
                 selector = styleEle;
                 styleEle = style;
             }
-            var sheet = styleEle.sheet ||styleEle.styleSheet;
-            index = utils.object.isNull(index)?(sheet.rules || sheet.cssRules).length : index;
+            var sheet = styleEle.sheet || styleEle.styleSheet;
+            index = utils.object.isNull(index) ? (sheet.rules || sheet.cssRules).length : index;
             if (sheet.insertRule) {
                 sheet.insertRule(selector + "{" + rules + "}", index);
             } else {
