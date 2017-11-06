@@ -19,11 +19,9 @@ var utils = {
             return utils.map.vals(this.getParamMap());
         },
         getParamMap: function () {
-            return this.paramStringToMap(window.location.search);
+            return this.paramStringToMap((window.location.search || "").replace(/^\?/, ""));
         },
         paramStringToMap: function (str) {
-            var url = (str || '').split('?');
-            str = url[url.length - 1];
             if (utils.string.isBlank(str)) {
                 return {};
             }
